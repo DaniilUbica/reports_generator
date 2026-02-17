@@ -1,0 +1,4 @@
+# qmldir
+
+singleton QMColors style/QMColor.qml
+singleton QMConst style/QMConst.qml

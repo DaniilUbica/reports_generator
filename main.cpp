@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     mapview::type_register::registerPlatformType();
 
     QQmlApplicationEngine engine;
-    engine.load(QUrl("qrc:/qml/main.qml"));
+    engine.load(QUrl("qrc:/main.qml"));
 
     return app.exec();
 }

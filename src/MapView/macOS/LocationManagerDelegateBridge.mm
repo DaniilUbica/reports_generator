@@ -20,11 +20,9 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    CLLocation *location = [locations lastObject];
-    if (location && self.mapView) {
-        qDebug() << "User location updated:"
-                 << location.coordinate.latitude << ","
-                 << location.coordinate.longitude;
+    CLLocation* location = [locations lastObject];
+    if (location && self.locationChangedCB) {
+        self.locationChangedCB(location);
     }
 }
 

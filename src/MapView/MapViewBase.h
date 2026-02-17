@@ -2,6 +2,9 @@
 
 #include <QQuickItem>
 
+const double MINIMUM_ZOOM_LEVEL = 0.5;
+const double MAXIMUM_ZOOM_LEVEL = 20.0;
+
 class MapViewBase : public QQuickItem {
     Q_OBJECT
 public:
@@ -14,7 +17,13 @@ public:
     Q_PROPERTY(double longitude MEMBER m_longitude WRITE setLongitude NOTIFY longitudeChanged)
     Q_SIGNAL void longitudeChanged();
 
-    Q_SIGNAL void clicked();
+    Q_PROPERTY(double minimumZoomLevel READ minimumZoomLevel CONSTANT)
+    double minimumZoomLevel() const { return MINIMUM_ZOOM_LEVEL; };
+
+    Q_PROPERTY(double maximumZoomLevel READ maximumZoomLevel CONSTANT)
+    double maximumZoomLevel() const { return MAXIMUM_ZOOM_LEVEL; };
+
+    Q_INVOKABLE virtual void zoomToMyPosition(double zoomLevel = 5.0);
 
     virtual void setLongitude(double lon);
     virtual void setLatitude(double lat);

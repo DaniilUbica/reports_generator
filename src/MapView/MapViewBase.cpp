@@ -8,6 +8,8 @@ MapViewBase::MapViewBase(QQuickItem *parent) : QQuickItem(parent) {
 
 MapViewBase::~MapViewBase() {}
 
+void MapViewBase::zoomToMyPosition(double zoomLevel) {}
+
 void MapViewBase::setLatitude(double lat) {
     if (qFuzzyCompare(m_latitude, lat)) {
         return;

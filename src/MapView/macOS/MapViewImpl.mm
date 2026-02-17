@@ -19,9 +19,16 @@ public:
 
         const auto locationManagerDelegate = [[LocationManagerDelegateBridge alloc] init];
         locationManagerDelegate.mapView = m_parent;
+
         locationManagerDelegate.authStatusAuthAlwaysCB = ^{
             [mapView setShowsUserLocation:YES];
         };
+        locationManagerDelegate.locationChangedCB = ^(CLLocation* location) {
+            qDebug() << "User location updated:"
+                     << location.coordinate.latitude << ","
+                     << location.coordinate.longitude;
+        };
+
         locationManager.delegate = std::move(locationManagerDelegate);
 
         [locationManager requestAlwaysAuthorization];
@@ -56,17 +63,15 @@ private:
 
 MapViewImpl::MapViewImpl(QQuickItem *parent) : MapViewBase(parent) {
     d = std::make_unique<MapViewImpl::Private>(this);
-
-    connect(this, &MapViewImpl::clicked, this, [this]() {
-        [d->locationManager startUpdatingLocation];
-
-        if (d->locationManager.location != nil) {
-            zoomToPoint(d->locationManager.location.coordinate.latitude, d->locationManager.location.coordinate.longitude, 5, true);
-        }
-    });
 }
 
 MapViewImpl::~MapViewImpl() {}
+
+void MapViewImpl::zoomToMyPosition(double zoomLevel) {
+    if (d->locationManager.location != nil) {
+        zoomToPoint(d->locationManager.location.coordinate.latitude, d->locationManager.location.coordinate.longitude, zoomLevel, true);
+    }
+}
 
 void MapViewImpl::setLatitude(double lat) {
     MapViewBase::setLatitude(lat);
@@ -93,14 +98,14 @@ void MapViewImpl::setLongitude(double lon) {
 void MapViewImpl::componentComplete() {
     MapViewBase::componentComplete();
 
-    const auto center = CLLocationCoordinate2DMake(m_latitude, m_longitude);
-    [d->mapView setCenterCoordinate:center animated:NO];
+    [d->locationManager startUpdatingLocation];
+    [d->mapView setCenterCoordinate:d->locationManager.location.coordinate animated:NO];
 
     const auto parentView = reinterpret_cast<NSView*>(window()->winId());
     [parentView addSubview:d->mapView];
 }
 
-void MapViewImpl::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) {
+void MapViewImpl::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) {
     MapViewBase::geometryChange(newGeometry, oldGeometry);
 
     if (d->mapView && isComponentComplete()) {

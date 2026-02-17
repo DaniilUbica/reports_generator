@@ -1,5 +1,9 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+
+import "controls"
+import "style"
 
 import reports.generator.types 1.0
 
@@ -8,18 +12,40 @@ Window {
     height: 480
     visible: true
     title: qsTr("Map")
+    color: QMColor.windowBackgroundColor
 
-    MapView {
-        id: map
+    ColumnLayout {
         anchors.fill: parent
-        latitude: 55.7558
-        longitude: 37.6176
+        spacing: QMConst.spacing
 
-        MouseArea {
-            anchors.fill: parent
+        MapView {
+            id: map
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+
+        QMButton {
+            text: qsTr("Zoom to my position")
+            Layout.preferredHeight: QMConst.controlHeight
+            Layout.fillWidth: true
+            Layout.leftMargin: QMConst.margin
+            Layout.rightMargin: QMConst.margin
 
             onClicked: {
-                map.clicked()
+                map.zoomToMyPosition()
+            }
+        }
+
+        QMSlider {
+            from: map.minimumZoomLevel
+            to: map.maximumZoomLevel
+            Layout.preferredHeight: QMConst.controlHeightSmall
+            Layout.fillWidth: true
+            Layout.leftMargin: QMConst.marginLarge
+            Layout.rightMargin: QMConst.marginLarge
+
+            onValueChanged: {
+                map.zoomToMyPosition(value)
             }
         }
     }

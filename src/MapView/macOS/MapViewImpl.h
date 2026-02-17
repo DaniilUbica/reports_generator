@@ -2,18 +2,13 @@
 
 #include "MapView/MapViewBase.h"
 
-#ifdef __OBJC__
-@class MKMapView;
-#else
-struct objc_object;
-typedef struct objc_object MKMapView;
-#endif
-
 class MapViewImpl : public MapViewBase {
     Q_OBJECT
 public:
     explicit MapViewImpl(QQuickItem *parent = nullptr);
     ~MapViewImpl();
+
+    void zoomToMyPosition(double zoomLevel) override;
 
     virtual void setLongitude(double lon) override;
     virtual void setLatitude(double lat) override;

@@ -7,4 +7,5 @@ class MapViewImpl;
 @interface LocationManagerDelegateBridge : NSObject<CLLocationManagerDelegate>
 @property (assign) MapViewImpl* mapView;
 @property (copy) void (^authStatusAuthAlwaysCB)(void);
+@property (copy) void (^locationChangedCB)(CLLocation*);
 @end

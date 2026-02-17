@@ -30,6 +30,9 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
         ${SOURCES}
         ${SOURCES_DIR}/MapView/macOS/MapViewImpl.mm
         ${SOURCES_DIR}/MapView/macOS/MapViewDelegateBridge.mm
+        ${SOURCES_DIR}/MapView/macOS/LocationManagerDelegateBridge.mm
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/bundle/Info.plist
     )
 
     set(HEADERS
@@ -37,13 +40,14 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
         ${SOURCES_DIR}/MapView/macOS/MapViewImpl.h
         ${SOURCES_DIR}/MapView/macOS/MapViewDelegateBridge.h
+        ${SOURCES_DIR}/MapView/macOS/LocationManagerDelegateBridge.h
     )
 
     enable_language(OBJCXX)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15")
 endif()
 
-add_executable(${CMAKE_PROJECT_NAME}
+add_executable(${CMAKE_PROJECT_NAME} MACOSX_BUNDLE
     ${SOURCES}
     ${HEADERS}
     ${RESOURCE}
@@ -66,4 +70,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     AUTOMOC ON
     AUTORCC ON
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/bundle/Info.plist
+    BUNDLE True
+    MACOSX_BUNDLE_BUNDLE_NAME ${CMAKE_PROJECT_NAME}
+    MACOSX_BUNDLE_GUI_IDENTIFIER "com.ubica.${CMAKE_PROJECT_NAME}"
 )

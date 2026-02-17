@@ -2,6 +2,13 @@
 
 #include "MapView/MapViewBase.h"
 
+#ifdef __OBJC__
+@class MKMapView;
+#else
+struct objc_object;
+typedef struct objc_object MKMapView;
+#endif
+
 class MapViewImpl : public MapViewBase {
     Q_OBJECT
 public:
@@ -18,5 +25,6 @@ protected:
     void zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) override;
     double altitudeFromZoomLevel(double zoomLevel) override;
 
-    void* m_mapView = nullptr;
+    class Private;
+    std::unique_ptr<Private> d;
 };

@@ -1,91 +1,120 @@
 #import "MapViewImpl.h"
 
 #import "MapViewDelegateBridge.h"
+#import "LocationManagerDelegateBridge.h"
 
 #import <MapKit/MapKit.h>
 
 #include <QQuickWindow>
 
+class MapViewImpl::Private final {
+public:
+    Private(MapViewImpl* parent) : m_parent(parent) {
+        mapView = [[MKMapView alloc] init];
+        locationManager = [[CLLocationManager alloc] init];
+
+        const auto mapViewDelegate = [[MapViewDelegateBridge alloc] init];
+        mapViewDelegate.mapView = m_parent;
+        mapView.delegate = std::move(mapViewDelegate);
+
+        const auto locationManagerDelegate = [[LocationManagerDelegateBridge alloc] init];
+        locationManagerDelegate.mapView = m_parent;
+        locationManagerDelegate.authStatusAuthAlwaysCB = ^{
+            [mapView setShowsUserLocation:YES];
+        };
+        locationManager.delegate = std::move(locationManagerDelegate);
+
+        [locationManager requestAlwaysAuthorization];
+    }
+
+    ~Private() {
+        if (mapView) {
+            [mapView.delegate release];
+            mapView.delegate = nil;
+
+            [mapView removeFromSuperview];
+            [mapView release];
+            mapView = nullptr;
+        }
+
+        if (locationManager) {
+            [locationManager.delegate release];
+            locationManager.delegate = nil;
+
+            [locationManager release];
+            locationManager = nullptr;
+        }
+    }
+
+
+    MKMapView* mapView = nullptr;
+    CLLocationManager* locationManager = nullptr;
+
+private:
+    MapViewImpl* m_parent;
+};
+
 MapViewImpl::MapViewImpl(QQuickItem *parent) : MapViewBase(parent) {
-    connect(this, &MapViewImpl::clicked, this, [this](){
-        zoomToPoint(12, 12, 2, true);
+    d = std::make_unique<MapViewImpl::Private>(this);
+
+    connect(this, &MapViewImpl::clicked, this, [this]() {
+        [d->locationManager startUpdatingLocation];
+
+        if (d->locationManager.location != nil) {
+            zoomToPoint(d->locationManager.location.coordinate.latitude, d->locationManager.location.coordinate.longitude, 5, true);
+        }
     });
 }
 
-MapViewImpl::~MapViewImpl() {
-    if (m_mapView) {
-        const auto mapView = (__bridge MKMapView*)m_mapView;
-        const auto delegate = (MapViewDelegateBridge*)mapView.delegate;
-
-        mapView.delegate = nil;
-        delegate.mapView = nullptr;
-
-        [delegate release];
-        [mapView removeFromSuperview];
-        [mapView release];
-    }
-}
+MapViewImpl::~MapViewImpl() {}
 
 void MapViewImpl::setLatitude(double lat) {
     MapViewBase::setLatitude(lat);
 
-    if (m_mapView && m_latitude != lat) {
-        const auto mapView = (__bridge MKMapView*)m_mapView;
-        auto center = mapView.centerCoordinate;
+    if (d->mapView && m_latitude != lat) {
+        auto center = d->mapView.centerCoordinate;
 
         center.latitude = lat;
-        [mapView setCenterCoordinate:center animated:YES];
+        [d->mapView setCenterCoordinate:center animated:YES];
     }
 }
 
 void MapViewImpl::setLongitude(double lon) {
     MapViewBase::setLongitude(lon);
 
-    if (m_mapView && m_longitude != lon) {
-        const auto mapView = (__bridge MKMapView*)m_mapView;
-        auto center = mapView.centerCoordinate;
+    if (d->mapView && m_longitude != lon) {
+        auto center = d->mapView.centerCoordinate;
 
         center.longitude = lon;
-        [mapView setCenterCoordinate:center animated:YES];
+        [d->mapView setCenterCoordinate:center animated:YES];
     }
 }
 
 void MapViewImpl::componentComplete() {
     MapViewBase::componentComplete();
 
-    const auto mapView = [[MKMapView alloc] init];
-    const auto delegate = [[MapViewDelegateBridge alloc] init];
-
-    delegate.mapView = this;
-    mapView.delegate = delegate;
-
     const auto center = CLLocationCoordinate2DMake(m_latitude, m_longitude);
-    [mapView setCenterCoordinate:center animated:NO];
+    [d->mapView setCenterCoordinate:center animated:NO];
 
     const auto parentView = reinterpret_cast<NSView*>(window()->winId());
-    [parentView addSubview:mapView];
-
-    m_mapView = (void*)CFBridgingRetain(mapView);
+    [parentView addSubview:d->mapView];
 }
 
 void MapViewImpl::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) {
     MapViewBase::geometryChange(newGeometry, oldGeometry);
 
-    if (m_mapView && isComponentComplete()) {
-        const auto mapView = (__bridge MKMapView*)m_mapView;
+    if (d->mapView && isComponentComplete()) {
         const auto frame = NSMakeRect(newGeometry.x(), newGeometry.y(),
                                  newGeometry.width(), newGeometry.height());
-        [mapView setFrame:frame];
+        [d->mapView setFrame:frame];
     }
 }
 
 void MapViewImpl::zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) {
-    if (!m_mapView || !isComponentComplete()) {
+    if (!d->mapView || !isComponentComplete()) {
         return;
     }
 
-    const auto mapView = (__bridge MKMapView *)m_mapView;
-    const auto delegate = (MapViewDelegateBridge*)mapView.delegate;
     const auto center = CLLocationCoordinate2DMake(latitude, longitude);
     const auto altitude = altitudeFromZoomLevel(zoomLevel);
 
@@ -93,7 +122,7 @@ void MapViewImpl::zoomToPoint(double latitude, double longitude, double zoomLeve
                                                       fromEyeCoordinate:center
                                                             eyeAltitude:altitude];
 
-    [mapView setCamera:camera animated:animated];
+    [d->mapView setCamera:camera animated:animated];
 }
 
 double MapViewImpl::altitudeFromZoomLevel(double zoomLevel) {

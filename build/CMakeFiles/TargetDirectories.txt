@@ -1,0 +1,5 @@
+/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/ReportsGenerator.dir
+/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/edit_cache.dir
+/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/rebuild_cache.dir
+/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/ReportsGenerator_autogen_timestamp_deps.dir
+/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/ReportsGenerator_autogen.dir

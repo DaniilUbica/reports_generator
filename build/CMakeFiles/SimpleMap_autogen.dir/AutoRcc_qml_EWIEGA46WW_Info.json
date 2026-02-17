@@ -1,0 +1,22 @@
+{
+	"BUILD_DIR" : "/Users/daniilubica/Developer/projects/c++/geo/build/SimpleMap_autogen",
+	"CMAKE_BINARY_DIR" : "/Users/daniilubica/Developer/projects/c++/geo/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/Users/daniilubica/Developer/projects/c++/geo/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/Users/daniilubica/Developer/projects/c++/geo",
+	"CMAKE_SOURCE_DIR" : "/Users/daniilubica/Developer/projects/c++/geo",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Unix Makefiles",
+	"INCLUDE_DIR" : "/Users/daniilubica/Developer/projects/c++/geo/build/SimpleMap_autogen/include",
+	"INPUTS" : [ "/Users/daniilubica/Developer/projects/c++/geo/qml/main.qml" ],
+	"LOCK_FILE" : "/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/SimpleMap_autogen.dir/AutoRcc_qml_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "qml" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_qml.cpp",
+	"RCC_EXECUTABLE" : "/Users/daniilubica/Developer/dev/Qt/Qt6/6.8.3/macos/libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/Users/daniilubica/Developer/projects/c++/geo/build/CMakeFiles/SimpleMap_autogen.dir/AutoRcc_qml_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/Users/daniilubica/Developer/projects/c++/geo/qml.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

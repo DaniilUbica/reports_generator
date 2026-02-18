@@ -12,6 +12,8 @@ set(SOURCES
     main.cpp
 
     ${SOURCES_DIR}/MapView/MapViewBase.cpp
+    ${SOURCES_DIR}/LocationManager/LocationManagerBase.cpp
+    ${SOURCES_DIR}/LocationManager/LocationManagerFactory.cpp
 
     qml.qrc
 )
@@ -19,6 +21,8 @@ set(SOURCES
 set(HEADERS
     ${SOURCES_DIR}/MapView/MapViewBase.h
     ${SOURCES_DIR}/MapView/MapViewRegister.hpp
+    ${SOURCES_DIR}/LocationManager/LocationManagerBase.h
+    ${SOURCES_DIR}/LocationManager/LocationManagerFactory.h
 )
 
 set(RESOURCE
@@ -30,7 +34,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
         ${SOURCES}
         ${SOURCES_DIR}/MapView/macOS/MapViewImpl.mm
         ${SOURCES_DIR}/MapView/macOS/MapViewDelegateBridge.mm
-        ${SOURCES_DIR}/MapView/macOS/LocationManagerDelegateBridge.mm
+        ${SOURCES_DIR}/LocationManager/macOS/LocationManagerImpl.mm
+        ${SOURCES_DIR}/LocationManager/macOS/LocationManagerDelegateBridge.mm
 
         ${CMAKE_CURRENT_SOURCE_DIR}/bundle/Info.plist
     )
@@ -40,7 +45,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
         ${SOURCES_DIR}/MapView/macOS/MapViewImpl.h
         ${SOURCES_DIR}/MapView/macOS/MapViewDelegateBridge.h
-        ${SOURCES_DIR}/MapView/macOS/LocationManagerDelegateBridge.h
+        ${SOURCES_DIR}/LocationManager/macOS/LocationManagerImpl.h
+        ${SOURCES_DIR}/LocationManager/macOS/LocationManagerDelegateBridge.h
     )
 
     enable_language(OBJCXX)

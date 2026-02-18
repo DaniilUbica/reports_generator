@@ -5,6 +5,8 @@
 const double MINIMUM_ZOOM_LEVEL = 0.5;
 const double MAXIMUM_ZOOM_LEVEL = 20.0;
 
+class LocationManagerBase;
+
 class MapViewBase : public QQuickItem {
     Q_OBJECT
 public:
@@ -23,18 +25,22 @@ public:
     Q_PROPERTY(double maximumZoomLevel READ maximumZoomLevel CONSTANT)
     double maximumZoomLevel() const { return MAXIMUM_ZOOM_LEVEL; };
 
-    Q_INVOKABLE virtual void zoomToMyPosition(double zoomLevel = 5.0);
+    Q_INVOKABLE virtual void zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated);
+    Q_INVOKABLE virtual void zoomToMyLocation(double zoomLevel, bool animated);
 
     virtual void setLongitude(double lon);
     virtual void setLatitude(double lat);
 
 protected:
+    virtual void showSelfLocation();
+    virtual void hideSelfLocation();
+
     virtual void componentComplete() override;
     virtual void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
-    virtual void zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated);
     virtual double altitudeFromZoomLevel(double zoomLevel);
 
     double m_latitude = 0.0;
     double m_longitude = 0.0;
+    std::shared_ptr<LocationManagerBase> m_locationManager;
 };

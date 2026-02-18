@@ -32,7 +32,7 @@ Window {
             Layout.rightMargin: QMConst.margin
 
             onClicked: {
-                map.zoomToMyPosition()
+                map.zoomToMyLocation(5.0, true)
             }
         }
 
@@ -45,7 +45,7 @@ Window {
             Layout.rightMargin: QMConst.marginLarge
 
             onValueChanged: {
-                map.zoomToMyPosition(value)
+                map.zoomToMyLocation(value, false)
             }
         }
     }

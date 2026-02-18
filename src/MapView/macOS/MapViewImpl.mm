@@ -1,7 +1,6 @@
 #import "MapViewImpl.h"
 
 #import "MapViewDelegateBridge.h"
-#import "LocationManagerDelegateBridge.h"
 
 #import <MapKit/MapKit.h>
 
@@ -11,27 +10,10 @@ class MapViewImpl::Private final {
 public:
     Private(MapViewImpl* parent) : m_parent(parent) {
         mapView = [[MKMapView alloc] init];
-        locationManager = [[CLLocationManager alloc] init];
 
         const auto mapViewDelegate = [[MapViewDelegateBridge alloc] init];
         mapViewDelegate.mapView = m_parent;
         mapView.delegate = std::move(mapViewDelegate);
-
-        const auto locationManagerDelegate = [[LocationManagerDelegateBridge alloc] init];
-        locationManagerDelegate.mapView = m_parent;
-
-        locationManagerDelegate.authStatusAuthAlwaysCB = ^{
-            [mapView setShowsUserLocation:YES];
-        };
-        locationManagerDelegate.locationChangedCB = ^(CLLocation* location) {
-            qDebug() << "User location updated:"
-                     << location.coordinate.latitude << ","
-                     << location.coordinate.longitude;
-        };
-
-        locationManager.delegate = std::move(locationManagerDelegate);
-
-        [locationManager requestAlwaysAuthorization];
     }
 
     ~Private() {
@@ -43,19 +25,10 @@ public:
             [mapView release];
             mapView = nullptr;
         }
-
-        if (locationManager) {
-            [locationManager.delegate release];
-            locationManager.delegate = nil;
-
-            [locationManager release];
-            locationManager = nullptr;
-        }
     }
 
 
     MKMapView* mapView = nullptr;
-    CLLocationManager* locationManager = nullptr;
 
 private:
     MapViewImpl* m_parent;
@@ -67,10 +40,19 @@ MapViewImpl::MapViewImpl(QQuickItem *parent) : MapViewBase(parent) {
 
 MapViewImpl::~MapViewImpl() {}
 
-void MapViewImpl::zoomToMyPosition(double zoomLevel) {
-    if (d->locationManager.location != nil) {
-        zoomToPoint(d->locationManager.location.coordinate.latitude, d->locationManager.location.coordinate.longitude, zoomLevel, true);
+void MapViewImpl::zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) {
+    if (!d->mapView || !isComponentComplete()) {
+        return;
     }
+
+    const auto center = CLLocationCoordinate2DMake(latitude, longitude);
+    const auto altitude = altitudeFromZoomLevel(zoomLevel);
+
+    const auto camera = [MKMapCamera cameraLookingAtCenterCoordinate:center
+                                                      fromEyeCoordinate:center
+                                                            eyeAltitude:altitude];
+
+    [d->mapView setCamera:camera animated:animated];
 }
 
 void MapViewImpl::setLatitude(double lat) {
@@ -82,6 +64,14 @@ void MapViewImpl::setLatitude(double lat) {
         center.latitude = lat;
         [d->mapView setCenterCoordinate:center animated:YES];
     }
+}
+
+void MapViewImpl::showSelfLocation() {
+    [d->mapView setShowsUserLocation:YES];
+}
+
+void MapViewImpl::hideSelfLocation() {
+    [d->mapView setShowsUserLocation:NO];
 }
 
 void MapViewImpl::setLongitude(double lon) {
@@ -98,9 +88,6 @@ void MapViewImpl::setLongitude(double lon) {
 void MapViewImpl::componentComplete() {
     MapViewBase::componentComplete();
 
-    [d->locationManager startUpdatingLocation];
-    [d->mapView setCenterCoordinate:d->locationManager.location.coordinate animated:NO];
-
     const auto parentView = reinterpret_cast<NSView*>(window()->winId());
     [parentView addSubview:d->mapView];
 }
@@ -113,21 +100,6 @@ void MapViewImpl::geometryChange(const QRectF& newGeometry, const QRectF& oldGeo
                                  newGeometry.width(), newGeometry.height());
         [d->mapView setFrame:frame];
     }
-}
-
-void MapViewImpl::zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) {
-    if (!d->mapView || !isComponentComplete()) {
-        return;
-    }
-
-    const auto center = CLLocationCoordinate2DMake(latitude, longitude);
-    const auto altitude = altitudeFromZoomLevel(zoomLevel);
-
-    const auto camera = [MKMapCamera cameraLookingAtCenterCoordinate:center
-                                                      fromEyeCoordinate:center
-                                                            eyeAltitude:altitude];
-
-    [d->mapView setCamera:camera animated:animated];
 }
 
 double MapViewImpl::altitudeFromZoomLevel(double zoomLevel) {

@@ -1,7 +1,4 @@
 #import "LocationManagerDelegateBridge.h"
-#import "MapViewImpl.h"
-
-#import <MapKit/MapKit.h>
 
 @implementation LocationManagerDelegateBridge
 
@@ -14,6 +11,9 @@
             break;
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
+            if (self.authStatusErrorCB) {
+                self.authStatusErrorCB();
+            }
         default:
             break;
     }

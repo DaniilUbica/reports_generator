@@ -8,16 +8,18 @@ public:
     explicit MapViewImpl(QQuickItem *parent = nullptr);
     ~MapViewImpl();
 
-    void zoomToMyPosition(double zoomLevel) override;
+    void zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) override;
 
-    virtual void setLongitude(double lon) override;
-    virtual void setLatitude(double lat) override;
+    void setLongitude(double lon) override;
+    void setLatitude(double lat) override;
+
+    void showSelfLocation() override;
+    void hideSelfLocation() override;
 
 protected:
     void componentComplete() override;
     void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
-    void zoomToPoint(double latitude, double longitude, double zoomLevel, bool animated) override;
     double altitudeFromZoomLevel(double zoomLevel) override;
 
     class Private;

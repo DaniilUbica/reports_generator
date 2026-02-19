@@ -50,6 +50,17 @@ void LocationManagerImpl::startUpdatingLocation() {
     [d->locationManager startUpdatingLocation];
 }
 
+void LocationManagerImpl::startTrackingLocation(const QPointF& targetLocation) {
+    LocationManagerBase::startTrackingLocation(targetLocation);
+
+    m_locationTrackingConnect = connect(this, &LocationManagerBase::locationChanged, this, [this](const QPointF& newLocation) {
+        if (isLocationInRadius(m_targetLocation, newLocation, 100)) {
+            disconnect(m_locationTrackingConnect);
+            Q_EMIT targetLocationReached();
+        }
+    }, Qt::QueuedConnection);
+}
+
 void LocationManagerImpl::requestLocationFromAddress(const QString& address, location_request_cb_t cb) const {
     const auto nsAddress = address.toNSString();
     const auto geocoder = [[CLGeocoder alloc] init];
@@ -82,4 +93,16 @@ void LocationManagerImpl::setLocation(double latitude, double longitude) {
         m_location = newLocation;
         Q_EMIT locationChanged(m_location);
     }
+}
+
+bool LocationManagerImpl::isLocationInRadius(const QPointF& location, const QPointF& targetLocation, double radius) {
+    const auto loc1 = [[CLLocation alloc] initWithLatitude:location.x() longitude:location.y()];
+    const auto loc2 = [[CLLocation alloc] initWithLatitude:targetLocation.x() longitude:targetLocation.y()];
+
+    const auto distance = [loc1 distanceFromLocation:loc2];
+
+    [loc1 release];
+    [loc2 release];
+
+    return distance <= radius;
 }

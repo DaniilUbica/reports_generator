@@ -8,13 +8,15 @@ MapViewBase::MapViewBase(QQuickItem *parent) : QQuickItem(parent) {
     setFlag(ItemHasContents, true);
 
     m_locationManager = LocationManagerFactory::requestLocationManager();
-    connect(m_locationManager.get(), &LocationManagerBase::locationTrackStatusChanged, this, [this](location::TrackStatus status) {
-        if (status == location::TrackStatus::Start) {
-            showSelfLocation();
-        }
-        else if (status == location::TrackStatus::Error) {
-            hideSelfLocation();
-        }
+    m_locationManager->locationTrackStatusChanged.connect([this](location::TrackStatus status) {
+        QMetaObject::invokeMethod(this, [this, status]() {
+            if (status == location::TrackStatus::Start) {
+                showSelfLocation();
+            }
+            else if (status == location::TrackStatus::Error) {
+                hideSelfLocation();
+            }
+        }, Qt::QueuedConnection);
     });
 
     if (m_locationManager->isTrackingLocation()) {
@@ -29,7 +31,7 @@ void MapViewBase::zoomToPoint(double latitude, double longitude, double zoomLeve
 
 void MapViewBase::zoomToMyLocation(double zoomLevel, bool animated) {
     const auto location = m_locationManager->currentLocation();
-    zoomToPoint(location.x(), location.y(), zoomLevel, animated);
+    zoomToPoint(location.lat, location.lon, zoomLevel, animated);
 }
 
 void MapViewBase::setLatitude(double lat) {

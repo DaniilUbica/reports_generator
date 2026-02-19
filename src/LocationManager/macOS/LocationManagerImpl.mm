@@ -50,19 +50,23 @@ void LocationManagerImpl::startUpdatingLocation() {
     [d->locationManager startUpdatingLocation];
 }
 
-void LocationManagerImpl::startTrackingLocation(const QPointF& targetLocation) {
+void LocationManagerImpl::startTrackingLocation(const location::Point& targetLocation) {
     LocationManagerBase::startTrackingLocation(targetLocation);
 
-    m_locationTrackingConnect = connect(this, &LocationManagerBase::locationChanged, this, [this](const QPointF& newLocation) {
-        if (isLocationInRadius(m_targetLocation, newLocation, 100)) {
-            disconnect(m_locationTrackingConnect);
-            Q_EMIT targetLocationReached();
+    m_locationTrackingConnect = locationChanged.connect([this](const location::Point& newLocation) {
+        if (isLocationInRadius(m_targetLocation, newLocation, 100) && !m_targetLocationReached) {
+            m_targetLocationReached = true;
+            targetLocationReached();
         }
-    }, Qt::QueuedConnection);
+        else if (m_targetLocationReached) {
+            m_targetLocationReached = false;
+            targetLocationAbandoned();
+        }
+    });
 }
 
-void LocationManagerImpl::requestLocationFromAddress(const QString& address, location_request_cb_t cb) const {
-    const auto nsAddress = address.toNSString();
+void LocationManagerImpl::requestLocationFromAddress(const std::string& address, location_request_cb_t cb) const {
+    const auto nsAddress = [NSString stringWithUTF8String:address.c_str()];
     const auto geocoder = [[CLGeocoder alloc] init];
 
     [geocoder geocodeAddressString:nsAddress completionHandler:^(NSArray<CLPlacemark*>* _Nullable placemarks, NSError* _Nullable error) {
@@ -74,7 +78,7 @@ void LocationManagerImpl::requestLocationFromAddress(const QString& address, loc
         const auto placemark = [placemarks firstObject];
         if (placemark) {
             const auto coordinate = placemark.location.coordinate;
-            const auto location = QPointF(coordinate.latitude, coordinate.longitude);
+            const auto location = location::Point{ coordinate.latitude, coordinate.longitude };
             cb(address, { location });
         }
     }];
@@ -83,21 +87,21 @@ void LocationManagerImpl::requestLocationFromAddress(const QString& address, loc
 void LocationManagerImpl::setLocationTrackStatus(location::TrackStatus status) {
     if (m_currentStatus != status) {
         m_currentStatus = status;
-        Q_EMIT locationTrackStatusChanged(m_currentStatus);
+        locationTrackStatusChanged(m_currentStatus);
     }
 }
 
 void LocationManagerImpl::setLocation(double latitude, double longitude) {
-    const auto newLocation = QPointF(latitude, longitude);
+    const auto newLocation = location::Point{ latitude, longitude };
     if (m_location != newLocation) {
         m_location = newLocation;
-        Q_EMIT locationChanged(m_location);
+        locationChanged(m_location);
     }
 }
 
-bool LocationManagerImpl::isLocationInRadius(const QPointF& location, const QPointF& targetLocation, double radius) {
-    const auto loc1 = [[CLLocation alloc] initWithLatitude:location.x() longitude:location.y()];
-    const auto loc2 = [[CLLocation alloc] initWithLatitude:targetLocation.x() longitude:targetLocation.y()];
+bool LocationManagerImpl::isLocationInRadius(const location::Point& location, const location::Point& targetLocation, double radius) {
+    const auto loc1 = [[CLLocation alloc] initWithLatitude:location.lat longitude:location.lon];
+    const auto loc2 = [[CLLocation alloc] initWithLatitude:targetLocation.lat longitude:targetLocation.lon];
 
     const auto distance = [loc1 distanceFromLocation:loc2];
 

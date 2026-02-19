@@ -16,6 +16,7 @@ set(SOURCES
     ${SOURCES_DIR}/LocationManager/LocationManagerFactory.cpp
     ${SOURCES_DIR}/Application/Application.cpp
     ${SOURCES_DIR}/AddressInputManager/AddressInputManager.cpp
+    ${SOURCES_DIR}/ConsoleApplication/ConsoleApplication.cpp
 
     qml.qrc
 )
@@ -27,6 +28,7 @@ set(HEADERS
     ${SOURCES_DIR}/LocationManager/LocationManagerFactory.h
     ${SOURCES_DIR}/Application/Application.h
     ${SOURCES_DIR}/AddressInputManager/AddressInputManager.h
+    ${SOURCES_DIR}/ConsoleApplication/ConsoleApplication.h
 )
 
 set(RESOURCE
@@ -66,6 +68,7 @@ add_executable(${CMAKE_PROJECT_NAME} MACOSX_BUNDLE
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${SOURCES_DIR}
 )
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE nod/include)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::Core

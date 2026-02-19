@@ -4,6 +4,6 @@ LocationManagerBase::LocationManagerBase() {}
 
 LocationManagerBase::~LocationManagerBase() {}
 
-void LocationManagerBase::startTrackingLocation(const QPointF& targetLocation) {
+void LocationManagerBase::startTrackingLocation(const location::Point& targetLocation) {
     m_targetLocation = targetLocation;
 }

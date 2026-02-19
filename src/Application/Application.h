@@ -4,12 +4,13 @@
 #include <QQmlContext>
 #include <QPointer>
 
-class LocationManagerBase;
+#include "ConsoleApplication/ConsoleApplication.h"
+
 class AddressInputManager;
 
 namespace rg {
 
-class Application final : public QGuiApplication {
+class Application final : public QGuiApplication, public ConsoleApplication {
     Q_OBJECT
 public:
     Application(int& argc, char** argv, int flags = ApplicationFlags);
@@ -17,10 +18,12 @@ public:
 
     void setupApplication(QQmlContext* context);
 
+    void onTargetLocationReached() override;
+    void onTargetLocationAbandoned() override;
+
     Q_SIGNAL void locationRequestCompleted(const QString& address, const QPointF& location);
 
 private:
-    std::shared_ptr<LocationManagerBase> m_locationManager;
     QPointer<AddressInputManager> m_addressInputManager;
 };
 

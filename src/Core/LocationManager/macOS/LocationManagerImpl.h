@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LocationManager/LocationManagerBase.h"
+#include "Core/LocationManager/LocationManagerBase.h"
 
 class LocationManagerImpl : public LocationManagerBase {
 public:

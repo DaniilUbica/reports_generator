@@ -2,7 +2,7 @@
 #include <QQmlContext>
 #include <QScopedPointer>
 
-#include "Application/Application.h"
+#include "GUI/Application/Application.h"
 
 int main(int argc, char *argv[]) {
     QScopedPointer<rg::Application> app(new rg::Application(argc, argv));

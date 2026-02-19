@@ -1,6 +1,6 @@
 #import "MapViewBase.h"
 
-#include "LocationManager/LocationManagerFactory.h"
+#include "Core/LocationManager/LocationManagerFactory.h"
 
 #include <QQuickWindow>
 

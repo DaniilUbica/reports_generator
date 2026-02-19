@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MapView/MapViewBase.h"
+#include "GUI/MapView/MapViewBase.h"
 
 class MapViewImpl : public MapViewBase {
     Q_OBJECT

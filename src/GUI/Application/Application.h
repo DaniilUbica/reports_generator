@@ -4,7 +4,7 @@
 #include <QQmlContext>
 #include <QPointer>
 
-#include "ConsoleApplication/ConsoleApplication.h"
+#include "Core/ConsoleApplication/ConsoleApplication.h"
 
 class AddressInputManager;
 

@@ -1,6 +1,6 @@
 #include "ConsoleApplication.h"
 
-#include "LocationManager/LocationManagerFactory.h"
+#include "Core/LocationManager/LocationManagerFactory.h"
 
 using namespace rg;
 

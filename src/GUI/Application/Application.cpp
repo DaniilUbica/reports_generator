@@ -1,8 +1,8 @@
 #include "Application.h"
 
-#include "MapView/MapViewRegister.hpp"
-#include "LocationManager/LocationManagerFactory.h"
-#include "AddressInputManager/AddressInputManager.h"
+#include "GUI/MapView/MapViewRegister.hpp"
+#include "GUI/AddressInputManager/AddressInputManager.h"
+#include "Core/LocationManager/LocationManagerFactory.h"
 
 #include <QDebug>
 

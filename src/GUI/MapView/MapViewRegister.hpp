@@ -1,5 +1,5 @@
 #ifdef __APPLE__
-    #include "MapView/macOS/MapViewImpl.h"
+    #include "GUI/MapView/macOS/MapViewImpl.h"
 #else
     #include "MapView/MapViewBase.h"
 #endif

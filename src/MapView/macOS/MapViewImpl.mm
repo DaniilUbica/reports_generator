@@ -58,7 +58,7 @@ void MapViewImpl::zoomToPoint(double latitude, double longitude, double zoomLeve
 void MapViewImpl::setLatitude(double lat) {
     MapViewBase::setLatitude(lat);
 
-    if (d->mapView && m_latitude != lat) {
+    if (d->mapView && m_center.x() != lat) {
         auto center = d->mapView.centerCoordinate;
 
         center.latitude = lat;
@@ -77,7 +77,7 @@ void MapViewImpl::hideSelfLocation() {
 void MapViewImpl::setLongitude(double lon) {
     MapViewBase::setLongitude(lon);
 
-    if (d->mapView && m_longitude != lon) {
+    if (d->mapView && m_center.y() != lon) {
         auto center = d->mapView.centerCoordinate;
 
         center.longitude = lon;

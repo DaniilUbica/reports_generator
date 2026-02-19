@@ -48,5 +48,42 @@ Window {
                 map.zoomToMyLocation(value, false)
             }
         }
+
+        RowLayout {
+            spacing: QMConst.spacing
+            Layout.fillWidth: true
+            Layout.bottomMargin: QMConst.margin
+            Layout.leftMargin: QMConst.margin
+            Layout.rightMargin: QMConst.margin
+
+            QMTextField {
+                id: addressInput
+                Layout.preferredHeight: QMConst.controlHeightSmall
+                Layout.fillWidth: true
+                Layout.leftMargin: QMConst.marginLarge
+                Layout.rightMargin: QMConst.marginLarge
+
+                placeholderText: qsTr("Enter address")
+            }
+
+            QMButton {
+                text: qsTr("Confirm")
+                Layout.preferredHeight: QMConst.controlHeightSmall
+
+                onClicked: {
+                    addressInputManager.addressEntered(addressInput.text)
+                    addressInput.text = ""
+                }
+            }
+        }
+    }
+
+    Connections {
+        target: rgApplication
+
+        // void locationRequestCompleted(const QString& address, const QPointF& location);
+        function onLocationRequestCompleted(address, location) {
+            map.zoomToPoint(location.x, location.y, 20.0, true)
+        }
     }
 }

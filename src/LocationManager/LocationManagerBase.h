@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QQmlContext>
 
+#include <functional>
+
 namespace location {
     enum class TrackStatus {
         None,
@@ -11,6 +13,8 @@ namespace location {
         Error
     };
 }
+
+using location_request_cb_t = std::function<void(const QString& address, const std::optional<QPointF>& location)>;
 
 class LocationManagerBase : public QObject {
     Q_OBJECT
@@ -22,6 +26,8 @@ public:
 
     bool isTrackingLocation() const { return m_currentStatus == location::TrackStatus::Start; };
     QPointF currentLocation() const { return m_location; };
+
+    virtual void requestLocationFromAddress(const QString& address, location_request_cb_t cb) const;
 
     Q_SIGNAL void locationTrackStatusChanged(location::TrackStatus status);
     Q_SIGNAL void locationChanged(const QPointF& location);

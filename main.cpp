@@ -1,22 +1,16 @@
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QDir>
-#include <QDebug>
+#include <QScopedPointer>
 
-#include "MapView/MapViewRegister.hpp"
-#include "LocationManager/LocationManagerFactory.h"
+#include "Application/Application.h"
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication app(argc, argv);
-
-    mapview::type_register::registerPlatformType();
-    const auto locationManager = LocationManagerFactory::requestLocationManager();
-    locationManager->startUpdatingLocation();
-
+int main(int argc, char *argv[]) {
+    QScopedPointer<rg::Application> app(new rg::Application(argc, argv));
     QQmlApplicationEngine engine;
+
+    app->setupApplication(engine.rootContext());
+
     engine.load(QUrl("qrc:/main.qml"));
 
-    return app.exec();
+    return app->exec();
 }

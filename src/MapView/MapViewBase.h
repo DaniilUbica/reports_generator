@@ -13,11 +13,8 @@ public:
     explicit MapViewBase(QQuickItem* parent = nullptr);
     ~MapViewBase();
 
-    Q_PROPERTY(double latitude MEMBER m_latitude WRITE setLatitude NOTIFY latitudeChanged)
-    Q_SIGNAL void latitudeChanged();
-
-    Q_PROPERTY(double longitude MEMBER m_longitude WRITE setLongitude NOTIFY longitudeChanged)
-    Q_SIGNAL void longitudeChanged();
+    Q_PROPERTY(QPointF center MEMBER m_center NOTIFY centerChanged)
+    Q_SIGNAL void centerChanged(const QPointF& center);
 
     Q_PROPERTY(double minimumZoomLevel READ minimumZoomLevel CONSTANT)
     double minimumZoomLevel() const { return MINIMUM_ZOOM_LEVEL; };
@@ -40,7 +37,6 @@ protected:
 
     virtual double altitudeFromZoomLevel(double zoomLevel);
 
-    double m_latitude = 0.0;
-    double m_longitude = 0.0;
+    QPointF m_center = { 0, 0 };
     std::shared_ptr<LocationManagerBase> m_locationManager;
 };

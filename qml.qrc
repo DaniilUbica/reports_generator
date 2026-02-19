@@ -6,6 +6,7 @@
     <qresource prefix="/controls">
         <file alias="QMButton.qml">qml/controls/QMButton.qml</file>
         <file alias="QMSlider.qml">qml/controls/QMSlider.qml</file>
+        <file alias="QMTextField.qml">qml/controls/QMTextField.qml</file>
     </qresource>
     <qresource prefix="/style">
         <file alias="QMConst.qml">qml/style/QMConst.qml</file>

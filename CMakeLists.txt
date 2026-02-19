@@ -14,6 +14,8 @@ set(SOURCES
     ${SOURCES_DIR}/MapView/MapViewBase.cpp
     ${SOURCES_DIR}/LocationManager/LocationManagerBase.cpp
     ${SOURCES_DIR}/LocationManager/LocationManagerFactory.cpp
+    ${SOURCES_DIR}/Application/Application.cpp
+    ${SOURCES_DIR}/AddressInputManager/AddressInputManager.cpp
 
     qml.qrc
 )
@@ -23,6 +25,8 @@ set(HEADERS
     ${SOURCES_DIR}/MapView/MapViewRegister.hpp
     ${SOURCES_DIR}/LocationManager/LocationManagerBase.h
     ${SOURCES_DIR}/LocationManager/LocationManagerFactory.h
+    ${SOURCES_DIR}/Application/Application.h
+    ${SOURCES_DIR}/AddressInputManager/AddressInputManager.h
 )
 
 set(RESOURCE

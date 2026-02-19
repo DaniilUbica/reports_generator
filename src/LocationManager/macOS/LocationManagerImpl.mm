@@ -50,6 +50,25 @@ void LocationManagerImpl::startUpdatingLocation() {
     [d->locationManager startUpdatingLocation];
 }
 
+void LocationManagerImpl::requestLocationFromAddress(const QString& address, location_request_cb_t cb) const {
+    const auto nsAddress = address.toNSString();
+    const auto geocoder = [[CLGeocoder alloc] init];
+
+    [geocoder geocodeAddressString:nsAddress completionHandler:^(NSArray<CLPlacemark*>* _Nullable placemarks, NSError* _Nullable error) {
+        if (error) {
+            cb(address, std::nullopt);
+            return;
+        }
+
+        const auto placemark = [placemarks firstObject];
+        if (placemark) {
+            const auto coordinate = placemark.location.coordinate;
+            const auto location = QPointF(coordinate.latitude, coordinate.longitude);
+            cb(address, { location });
+        }
+    }];
+}
+
 void LocationManagerImpl::setLocationTrackStatus(location::TrackStatus status) {
     if (m_currentStatus != status) {
         m_currentStatus = status;

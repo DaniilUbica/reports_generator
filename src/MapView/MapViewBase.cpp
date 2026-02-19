@@ -19,6 +19,7 @@ MapViewBase::MapViewBase(QQuickItem *parent) : QQuickItem(parent) {
 
     if (m_locationManager->isTrackingLocation()) {
         showSelfLocation();
+        zoomToMyLocation(5.0, true);
     }
 }
 
@@ -32,21 +33,21 @@ void MapViewBase::zoomToMyLocation(double zoomLevel, bool animated) {
 }
 
 void MapViewBase::setLatitude(double lat) {
-    if (qFuzzyCompare(m_latitude, lat)) {
+    if (qFuzzyCompare(m_center.x(), lat)) {
         return;
     }
 
-    m_latitude = lat;
-    Q_EMIT latitudeChanged();
+    m_center.setX(lat);
+    Q_EMIT centerChanged(m_center);
 }
 
 void MapViewBase::setLongitude(double lon) {
-    if (qFuzzyCompare(m_longitude, lon)){
+    if (qFuzzyCompare(m_center.y(), lon)){
         return;
     }
 
-    m_longitude = lon;
-    Q_EMIT longitudeChanged();
+    m_center.setY(lon);
+    Q_EMIT centerChanged(m_center);
 }
 
 void MapViewBase::showSelfLocation() {}

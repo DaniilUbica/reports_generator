@@ -4,6 +4,7 @@
 
 class LocationManagerBase;
 class AddressInputManager;
+class ReportsManager;
 
 namespace rg {
 
@@ -17,6 +18,7 @@ public:
 
 protected:
     std::shared_ptr<LocationManagerBase> m_locationManager;
+    std::unique_ptr<ReportsManager> m_reportsManager;
 };
 
 }

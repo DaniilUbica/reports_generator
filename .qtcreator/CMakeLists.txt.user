@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 18.0.2, 2026-02-18T12:12:52. -->
+<!-- Written by QtCreator 18.0.2, 2026-02-19T23:51:50. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -62,6 +62,9 @@
  <data>
   <variable>ProjectExplorer.Project.PluginSettings</variable>
   <valuemap type="QVariantMap">
+   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
+    <value type="bool" key="UseGlobalSettings">true</value>
+   </valuemap>
    <value type="int" key="RcSync">0</value>
   </valuemap>
  </data>
@@ -81,18 +84,18 @@
     <value type="int" key="CMake.Configure.BaseEnvironment">2</value>
     <value type="bool" key="CMake.Configure.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="CMake.Configure.UserEnvironmentChanges"/>
-    <value type="QString" key="CMake.Initial.Parameters">-DCMAKE_CXX_COMPILER:FILEPATH=%{Compiler:Executable:Cxx}
--DCMAKE_CXX_FLAGS_INIT:STRING=%{Qt:QML_DEBUG_FLAG}
--DCMAKE_C_COMPILER:FILEPATH=%{Compiler:Executable:C}
--DCMAKE_BUILD_TYPE:STRING=Debug
+    <value type="QString" key="CMake.Initial.Parameters">-DCMAKE_CXX_FLAGS_INIT:STRING=%{Qt:QML_DEBUG_FLAG}
+-DCMAKE_COLOR_DIAGNOSTICS:BOOL=ON
 -DQT_MAINTENANCE_TOOL:FILEPATH=/Users/daniilubica/Developer/dev/Qt/Qt6/MaintenanceTool.app/Contents/MacOS/MaintenanceTool
--DCMAKE_PREFIX_PATH:PATH=%{Qt:QT_INSTALL_PREFIX}
--DQT_QMAKE_EXECUTABLE:FILEPATH=%{Qt:qmakeExecutable}
--DCMAKE_PROJECT_INCLUDE_BEFORE:FILEPATH=%{BuildConfig:BuildDirectory:NativeFilePath}/.qtc/package-manager/auto-setup.cmake
 -DCMAKE_GENERATOR:STRING=Unix Makefiles
--DCMAKE_COLOR_DIAGNOSTICS:BOOL=ON</value>
+-DCMAKE_CXX_COMPILER:FILEPATH=%{Compiler:Executable:Cxx}
+-DCMAKE_C_COMPILER:FILEPATH=%{Compiler:Executable:C}
+-DQT_QMAKE_EXECUTABLE:FILEPATH=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:PATH=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_BUILD_TYPE:STRING=Debug
+-DCMAKE_PROJECT_INCLUDE_BEFORE:FILEPATH=%{BuildConfig:BuildDirectory:NativeFilePath}/.qtc/package-manager/auto-setup.cmake</value>
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/Users/daniilubica/Developer/projects/c++/geo/build</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/Users/daniilubica/Developer/projects/c++/reports_generator/build</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="QString" key="CMakeProjectManager.MakeStep.BuildPreset"></value>
@@ -176,16 +179,16 @@
     <value type="int" key="CMake.Configure.BaseEnvironment">2</value>
     <value type="bool" key="CMake.Configure.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="CMake.Configure.UserEnvironmentChanges"/>
-    <value type="QString" key="CMake.Initial.Parameters">-DCMAKE_CXX_COMPILER:FILEPATH=%{Compiler:Executable:Cxx}
--DCMAKE_CXX_FLAGS_INIT:STRING=%{Qt:QML_DEBUG_FLAG}
--DCMAKE_C_COMPILER:FILEPATH=%{Compiler:Executable:C}
--DCMAKE_BUILD_TYPE:STRING=Release
+    <value type="QString" key="CMake.Initial.Parameters">-DCMAKE_CXX_FLAGS_INIT:STRING=%{Qt:QML_DEBUG_FLAG}
+-DCMAKE_COLOR_DIAGNOSTICS:BOOL=ON
 -DQT_MAINTENANCE_TOOL:FILEPATH=/Users/daniilubica/Developer/dev/Qt/Qt6/MaintenanceTool.app/Contents/MacOS/MaintenanceTool
--DCMAKE_PREFIX_PATH:PATH=%{Qt:QT_INSTALL_PREFIX}
--DQT_QMAKE_EXECUTABLE:FILEPATH=%{Qt:qmakeExecutable}
--DCMAKE_PROJECT_INCLUDE_BEFORE:FILEPATH=%{BuildConfig:BuildDirectory:NativeFilePath}/.qtc/package-manager/auto-setup.cmake
 -DCMAKE_GENERATOR:STRING=Unix Makefiles
--DCMAKE_COLOR_DIAGNOSTICS:BOOL=ON</value>
+-DCMAKE_CXX_COMPILER:FILEPATH=%{Compiler:Executable:Cxx}
+-DCMAKE_C_COMPILER:FILEPATH=%{Compiler:Executable:C}
+-DQT_QMAKE_EXECUTABLE:FILEPATH=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:PATH=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_BUILD_TYPE:STRING=Release
+-DCMAKE_PROJECT_INCLUDE_BEFORE:FILEPATH=%{BuildConfig:BuildDirectory:NativeFilePath}/.qtc/package-manager/auto-setup.cmake</value>
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/Users/daniilubica/Developer/projects/c++/geo/build</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(ReportsGenerator LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Quick)
@@ -18,6 +18,7 @@ set(SOURCES
     ${SOURCES_DIR}/Core/LocationManager/LocationManagerBase.cpp
     ${SOURCES_DIR}/Core/LocationManager/LocationManagerFactory.cpp
     ${SOURCES_DIR}/Core/ConsoleApplication/ConsoleApplication.cpp
+    ${SOURCES_DIR}/Core/ReportsManager/ReportsManager.cpp
 
     qml.qrc
 )
@@ -28,9 +29,10 @@ set(HEADERS
     ${SOURCES_DIR}/GUI/Application/Application.h
     ${SOURCES_DIR}/GUI/AddressInputManager/AddressInputManager.h
 
-    ${SOURCES_DIR}/Core/ConsoleApplication/ConsoleApplication.h
     ${SOURCES_DIR}/Core/LocationManager/LocationManagerBase.h
     ${SOURCES_DIR}/Core/LocationManager/LocationManagerFactory.h
+    ${SOURCES_DIR}/Core/ConsoleApplication/ConsoleApplication.h
+    ${SOURCES_DIR}/Core/ReportsManager/ReportsManager.h
 )
 
 set(RESOURCE
@@ -60,7 +62,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     )
 
     enable_language(OBJCXX)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "13.3" CACHE STRING "Minimum OS X deployment version")
 endif()
 
 add_executable(${CMAKE_PROJECT_NAME} MACOSX_BUNDLE

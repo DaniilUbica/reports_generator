@@ -8,11 +8,16 @@ import "style"
 import reports.generator.types 1.0
 
 Window {
+    id: root
     width: 640
     height: 480
     visible: true
     title: qsTr("Reports generator")
     color: QMColor.windowBackgroundColor
+
+    QMTrayIcon {
+        mainWindow: root
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -22,6 +27,7 @@ Window {
             id: map
             Layout.fillWidth: true
             Layout.fillHeight: true
+            visible: root.visible
         }
 
         QMButton {

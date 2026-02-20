@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGuiApplication>
+#include <QQuickWindow>
 #include <QQmlContext>
 #include <QPointer>
 

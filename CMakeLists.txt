@@ -19,8 +19,6 @@ set(SOURCES
     ${SOURCES_DIR}/Core/LocationManager/LocationManagerFactory.cpp
     ${SOURCES_DIR}/Core/ConsoleApplication/ConsoleApplication.cpp
     ${SOURCES_DIR}/Core/ReportsManager/ReportsManager.cpp
-
-    qml.qrc
 )
 
 set(HEADERS
@@ -37,6 +35,7 @@ set(HEADERS
 
 set(RESOURCE
     qml.qrc
+    resource.qrc
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")

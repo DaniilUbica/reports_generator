@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cassert>
 #include <fstream>
+#include <filesystem>
 
 const std::string REPORTS_FILE_DIR = "reports/";
 
@@ -24,7 +25,12 @@ void ReportsManager::startNewReport(ReportOptions&& options) {
     };
 
     if (m_currentReportOptions.writeToFile) {
-        m_currentReport->filePath = REPORTS_FILE_DIR + std::format("rep_{}.txt", m_reportsCount + 1);
+        const char* home = getenv("HOME");
+        const std::string dirPath = std::string(home) + "/Documents/" + REPORTS_FILE_DIR;
+        if (!std::filesystem::exists(dirPath)) {
+            std::filesystem::create_directory(dirPath);
+        }
+        m_currentReport->filePath = dirPath + std::format("rep_{}.txt", m_reportsCount + 1);
     }
 }
 
@@ -50,7 +56,10 @@ Report ReportsManager::endCurrentReport() {
         reportFile.close();
     }
 
-    return std::move(m_currentReport.value());
+    const auto ret = m_currentReport.value();
+    m_currentReport = std::nullopt;
+
+    return ret;
 }
 
 std::string ReportsManager::formatTime(const std::chrono::system_clock::time_point& time) const {

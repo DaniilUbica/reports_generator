@@ -36,6 +36,22 @@ private:
 
 MapViewImpl::MapViewImpl(QQuickItem *parent) : MapViewBase(parent) {
     d = std::make_unique<MapViewImpl::Private>(this);
+
+    connect(this, &MapViewBase::visibleChanged, this, [this]() {
+        if (d->mapView && isComponentComplete()) {
+            if (isVisible()) {
+                if (![d->mapView superview]) {
+                    const auto parentView = reinterpret_cast<NSView*>(window()->winId());
+                    [parentView addSubview:d->mapView];
+                }
+            }
+            else {
+                if ([d->mapView superview]) {
+                    [d->mapView removeFromSuperview];
+                }
+            }
+        }
+    });
 }
 
 MapViewImpl::~MapViewImpl() {}
@@ -87,9 +103,6 @@ void MapViewImpl::setLongitude(double lon) {
 
 void MapViewImpl::componentComplete() {
     MapViewBase::componentComplete();
-
-    const auto parentView = reinterpret_cast<NSView*>(window()->winId());
-    [parentView addSubview:d->mapView];
 }
 
 void MapViewImpl::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) {

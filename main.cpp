@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     app->setupApplication(engine.rootContext());
+    app->setQuitOnLastWindowClosed(false);
 
     engine.load(QUrl("qrc:/main.qml"));
 

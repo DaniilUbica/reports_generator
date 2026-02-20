@@ -54,11 +54,12 @@ void LocationManagerImpl::startTrackingLocation(const location::Point& targetLoc
     LocationManagerBase::startTrackingLocation(targetLocation);
 
     m_locationTrackingConnect = locationChanged.connect([this](const location::Point& newLocation) {
-        if (isLocationInRadius(m_targetLocation, newLocation, 100) && !m_targetLocationReached) {
+        const auto inRadius = isLocationInRadius(m_targetLocation, newLocation, 100);
+        if (inRadius && !m_targetLocationReached) {
             m_targetLocationReached = true;
             targetLocationReached();
         }
-        else if (m_targetLocationReached) {
+        else if (!inRadius && m_targetLocationReached) {
             m_targetLocationReached = false;
             targetLocationAbandoned();
         }

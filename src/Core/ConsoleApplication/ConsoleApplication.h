@@ -2,11 +2,17 @@
 
 #include <memory>
 
+#include "Core/DataBase/DataBaseRequestData.h"
+
 class LocationManagerBase;
 class AddressInputManager;
 class ReportsManager;
 
 namespace rg {
+
+namespace database {
+    class ReportsGeneratorDBWrapper;
+}
 
 class ConsoleApplication {
 public:
@@ -18,6 +24,7 @@ public:
 
 protected:
     std::shared_ptr<LocationManagerBase> m_locationManager;
+    std::shared_ptr<database::ReportsGeneratorDBWrapper> m_rgDbWrapper;
     std::unique_ptr<ReportsManager> m_reportsManager;
 };
 

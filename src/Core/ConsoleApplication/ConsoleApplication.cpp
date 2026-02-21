@@ -3,11 +3,14 @@
 #include "Core/LocationManager/LocationManagerFactory.h"
 #include "Core/ReportsManager/ReportsManager.h"
 
+#include "Core/DataBase/Wrappers/ReportsGeneratorDBWrapper.h"
+
 using namespace rg;
 
 ConsoleApplication::ConsoleApplication(int& argc, char** argv) {
     m_locationManager = LocationManagerFactory::requestLocationManager();
     m_reportsManager = std::make_unique<ReportsManager>();
+    m_rgDbWrapper = database::ReportsGeneratorDBWrapper::instance();
 
     m_locationManager->startUpdatingLocation();
 

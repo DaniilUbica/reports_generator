@@ -1,5 +1,7 @@
 #include "ReportsManager.h"
 
+#include "Core/DataBase/Wrappers/ReportsGeneratorDBWrapper.h"
+
 #include <format>
 #include <iomanip>
 #include <sstream>
@@ -9,7 +11,22 @@
 
 const std::string REPORTS_FILE_DIR = "reports/";
 
-ReportsManager::ReportsManager() {}
+ReportsManager::ReportsManager() {
+    using namespace rg::database;
+
+    const auto reportsDirPath = ReportsGeneratorDBWrapper::instance()->getValue<std::string>(REPORTS_PATH_FIELD_NAME);
+    const auto reportsCount = ReportsGeneratorDBWrapper::instance()->getValue<int>(REPORTS_COUNT_FIELD_NAME);
+
+    if (!reportsDirPath) {
+        const char* home = getenv("HOME");
+        m_reportsDirPath = std::string(home) + "/Documents/" + REPORTS_FILE_DIR; //todo: temp solution
+    }
+    else {
+        m_reportsDirPath = reportsDirPath.value();
+    }
+
+    m_reportsCount = reportsCount.has_value() ? reportsCount.value() : 0;
+}
 
 void ReportsManager::startNewReport(ReportOptions&& options) {
     if (m_currentReport) {
@@ -25,12 +42,10 @@ void ReportsManager::startNewReport(ReportOptions&& options) {
     };
 
     if (m_currentReportOptions.writeToFile) {
-        const char* home = getenv("HOME");
-        const std::string dirPath = std::string(home) + "/Documents/" + REPORTS_FILE_DIR;
-        if (!std::filesystem::exists(dirPath)) {
-            std::filesystem::create_directory(dirPath);
+        if (!std::filesystem::exists(m_reportsDirPath)) {
+            std::filesystem::create_directory(m_reportsDirPath);
         }
-        m_currentReport->filePath = dirPath + std::format("rep_{}.txt", m_reportsCount + 1);
+        m_currentReport->filePath = m_reportsDirPath + std::format("rep_{}.txt", m_reportsCount + 1);
     }
 }
 
@@ -44,6 +59,7 @@ Report ReportsManager::endCurrentReport() {
     m_currentReport->duration = minutesToFormattedTime(calculateDuration());
 
     m_reportsCount++;
+    assert(rg::database::ReportsGeneratorDBWrapper::instance()->setValue(rg::database::REPORTS_COUNT_FIELD_NAME, m_reportsCount));
 
     if (m_currentReportOptions.writeToFile) {
         std::ofstream reportFile(m_currentReport->filePath);

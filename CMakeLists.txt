@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 
 option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_BUNDLE "Build bundle" OFF)
 
 if(BUILD_TESTS)
     enable_testing()
@@ -54,9 +55,13 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     AUTORCC ON
-    
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/bundle/Info.plist
-    BUNDLE True
-    MACOSX_BUNDLE_BUNDLE_NAME ${CMAKE_PROJECT_NAME}
-    MACOSX_BUNDLE_GUI_IDENTIFIER "com.ubica.${CMAKE_PROJECT_NAME}"
 )
+
+if (BUILD_BUNDLE) 
+    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+        BUNDLE True
+        MACOSX_BUNDLE_BUNDLE_NAME ${CMAKE_PROJECT_NAME}
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.ubica.${CMAKE_PROJECT_NAME}"
+    )
+endif()

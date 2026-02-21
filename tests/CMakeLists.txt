@@ -12,11 +12,14 @@ add_executable(${UNIT_NAME}
 )
 
 target_include_directories(${UNIT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/Core
+    ${CMAKE_SOURCE_DIR}/src/GUI
 )
 
 target_link_libraries(${UNIT_NAME} PRIVATE
-    ${CMAKE_PROJECT_NAME}
+    ${CMAKE_SOURCE_DIR}/src/Core
+    ${CMAKE_SOURCE_DIR}/src/GUI
     gtest_main
     gmock
 )

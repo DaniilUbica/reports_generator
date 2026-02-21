@@ -2,6 +2,13 @@
 
 #include <chrono>
 
+namespace rg {
+    namespace database {
+        class DataBaseManager;
+    }
+}
+
+
 struct ReportOptions {
     bool writeToFile = false;
 };
@@ -23,9 +30,12 @@ public:
     void startNewReport(ReportOptions&& options = {});
     Report endCurrentReport();
 
-    std::string formatTime(const std::chrono::system_clock::time_point& time) const;
-    std::string minutesToFormattedTime(const std::chrono::minutes& minutes) const;
-    std::string currentDate() const;
+    [[nodiscard]] std::string formatTime(const std::chrono::system_clock::time_point& time) const;
+    [[nodiscard]] std::string minutesToFormattedTime(const std::chrono::minutes& minutes) const;
+    [[nodiscard]] std::string currentDate() const;
+
+    [[nodiscard]] size_t reportsCount() const { return m_reportsCount; };
+    [[nodiscard]] std::string reportsDirPath() const { return m_reportsDirPath; };
 
 private:
     std::chrono::minutes calculateDuration() const;
@@ -36,5 +46,7 @@ private:
     std::optional<Report> m_currentReport;
     std::optional<time_point_t> m_currentReportStartTime;
 
-    size_t m_reportsCount = 0;
+    int m_reportsCount = 0;
+
+    std::string m_reportsDirPath;
 };

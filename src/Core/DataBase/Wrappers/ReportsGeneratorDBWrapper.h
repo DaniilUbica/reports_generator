@@ -6,6 +6,7 @@ namespace rg {
 namespace database {
 
 const std::string REPORTS_COUNT_FIELD_NAME = "reports_count";
+const std::string HAS_MONTH_REPORT = "has_month_report";
 const std::string REPORTS_PATH_FIELD_NAME = "reports_path";
 
 namespace {

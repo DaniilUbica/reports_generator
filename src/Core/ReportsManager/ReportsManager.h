@@ -3,6 +3,8 @@
 #include <chrono>
 
 namespace rg {
+    class ExcelEditor;
+
     namespace database {
         class DataBaseManager;
     }
@@ -26,6 +28,7 @@ struct Report {
 class ReportsManager {
 public:
     ReportsManager();
+    ~ReportsManager();
 
     void startNewReport(ReportOptions&& options = {});
     Report endCurrentReport();
@@ -39,6 +42,15 @@ public:
 
 private:
     std::chrono::minutes calculateDuration() const;
+    void initExcelHeaders();
+
+    struct ExcelCellsData { // todo: it's taken from my reports, user will have to input this value later
+        const std::string hospitalDaysValueCell   = "G2";
+        const std::string holidayDaysValueCell    = "G5";
+        const std::string summaryValueCell        = "I2";
+        const std::string socialsValueCell        = "I5";
+        const std::string summarySocialsValueCell = "I7";
+    };
 
     using time_point_t = std::chrono::system_clock::time_point;
 
@@ -49,4 +61,5 @@ private:
     int m_reportsCount = 0;
 
     std::string m_reportsDirPath;
+    std::unique_ptr<rg::ExcelEditor> m_excelEditor;
 };

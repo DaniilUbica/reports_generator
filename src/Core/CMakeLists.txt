@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 set(UNIT_NAME Core)
 
 find_package(SQLite3 REQUIRED)
+find_library(XLNT_LIBRARY NAMES xlnt PATHS ${CMAKE_SOURCE_DIR}/xlnt/build/source)
 
 set(SOURCES
     LocationManager/LocationManagerBase.cpp
@@ -10,6 +11,7 @@ set(SOURCES
     ReportsManager/ReportsManager.cpp
     DataBase/DataBaseManager.cpp
     DataBase/Wrappers/ReportsGeneratorDBWrapper.cpp
+    ExcelEditor/ExcelEditor.cpp
 )
 
 set(HEADERS
@@ -22,6 +24,7 @@ set(HEADERS
     DataBase/sqlite3_pointer.h
     DataBase/sqlite3_helpers.h
     DataBase/Wrappers/ReportsGeneratorDBWrapper.h
+    ExcelEditor/ExcelEditor.h
 
     cpplib/out_ptr.hpp
 )
@@ -50,11 +53,13 @@ add_library(${UNIT_NAME} STATIC
 
 target_include_directories(${UNIT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/nod/include
+    ${CMAKE_SOURCE_DIR}/xlnt/include
     ${CMAKE_SOURCE_DIR}/src
 )
 
 target_link_libraries(${UNIT_NAME} PUBLIC
     SQLite::SQLite3
+    ${XLNT_LIBRARY}
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")

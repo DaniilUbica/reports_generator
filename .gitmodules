@@ -5,3 +5,7 @@
 [submodule "tests/googletest"]
 	path = tests/googletest
 	url = git@github.com:google/googletest.git
+
+[submodule "xlnt"]
+	path = xlnt§
+	utl = git@github.com:xlnt-community/xlnt.git

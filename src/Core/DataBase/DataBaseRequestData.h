@@ -13,6 +13,7 @@ namespace database {
 template<typename T>
 concept SQLiteCompatible = std::is_same_v<T, int> ||
                           std::is_same_v<T, double> ||
+                          std::is_same_v<T, bool> ||
                           std::is_same_v<T, std::string> ||
                           std::is_same_v<T, const char*> ||
                           std::is_same_v<T, std::nullptr_t> ||

@@ -29,11 +29,11 @@ ReportsManager::ReportsManager() {
         m_reportsDirPath = reportsDirPath.value();
     }
 
-    const auto hasExcel = ReportsGeneratorDBWrapper::instance()->getValue<std::string>(HAS_MONTH_REPORT);
+    const auto hasExcel = ReportsGeneratorDBWrapper::instance()->getValue<std::string>(HAS_MONTH_REPORT_FIELD_NAME);
     if (!hasExcel) {
         m_excelEditor->create(m_reportsDirPath + '/' + EXCEL_REPORT_FILE_NAME);
         initExcelHeaders();
-        assert(ReportsGeneratorDBWrapper::instance()->setValue(HAS_MONTH_REPORT, true));
+        assert(ReportsGeneratorDBWrapper::instance()->setValue(HAS_MONTH_REPORT_FIELD_NAME, true));
     }
     else {
         m_excelEditor->open(m_reportsDirPath + '/' + EXCEL_REPORT_FILE_NAME);

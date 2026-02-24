@@ -20,6 +20,11 @@ ConsoleApplication::ConsoleApplication(int& argc, char** argv) {
     m_locationManager->targetLocationAbandoned.connect([this]() {
         onTargetLocationAbandoned();
     });
+
+    const auto trackingAddress = m_rgDbWrapper->getValue<std::string>(database::TRACKING_ADDRESS_FIELD_NAME);
+    if (trackingAddress.has_value()) {
+        startTrackingAddress(trackingAddress.value());
+    }
 }
 
 ConsoleApplication::~ConsoleApplication() {}
@@ -31,4 +36,17 @@ void ConsoleApplication::onTargetLocationReached() {
 
 void ConsoleApplication::onTargetLocationAbandoned() {
     m_reportsManager->endCurrentReport();
+}
+
+void ConsoleApplication::onLocationFromAddressReceived(const std::string& address, const std::optional<location::Point>& location) {}
+
+void ConsoleApplication::startTrackingAddress(const std::string& address) {
+    if (m_trackingAddress != address) {
+        m_trackingAddress = address;
+        assert(m_rgDbWrapper->setValue(database::TRACKING_ADDRESS_FIELD_NAME, m_trackingAddress));
+
+        m_locationManager->requestLocationFromAddress(address, [this](const std::string& address, const std::optional<location::Point>& location) {
+            onLocationFromAddressReceived(address, location);
+        });
+    }
 }

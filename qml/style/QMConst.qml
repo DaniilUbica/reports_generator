@@ -15,4 +15,7 @@ QtObject {
     readonly property real marginLarge: 16
 
     readonly property real controlRadius: 8
+
+    readonly property real fontMainSize: 32
+    readonly property real fontSize: 16
 }

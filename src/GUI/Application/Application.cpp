@@ -17,16 +17,7 @@ Application::Application(int& argc, char** argv, int flags) :
     m_addressInputManager = new AddressInputManager(this);
 
     connect(m_addressInputManager, &AddressInputManager::addressEntered, this, [this](const QString& address) {
-        m_locationManager->requestLocationFromAddress(address.toStdString(), [this](const std::string& address, const std::optional<location::Point>& location) {
-            if (location.has_value()) {
-                QMetaObject::invokeMethod(this, [this, address, location]() {
-                    m_locationManager->startTrackingLocation(location.value());
-                    Q_EMIT locationRequestCompleted(QString::fromStdString(address), { location->lat, location->lon });
-
-                    qDebug() << "target location setted" << QPointF{ location->lat, location->lon };
-                }, Qt::QueuedConnection);
-            }
-        });
+        startTrackingAddress(address.toStdString());
     });
 }
 
@@ -47,4 +38,28 @@ void Application::onTargetLocationAbandoned() {
     ConsoleApplication::onTargetLocationAbandoned();
 
     qDebug() << "target location abandoned";
+}
+
+void Application::onLocationFromAddressReceived(const std::string& address, const std::optional<location::Point>& location) {
+    if (location.has_value()) {
+        QMetaObject::invokeMethod(this, [this, address, location]() {
+            m_locationManager->startTrackingLocation(location.value());
+            Q_EMIT locationRequestCompleted(QString::fromStdString(address), { location->lat, location->lon });
+
+            qDebug() << "target location setted" << QPointF{ location->lat, location->lon };
+        }, Qt::QueuedConnection);
+    }
+}
+
+void Application::startTrackingAddress(const std::string& address) {
+    ConsoleApplication::startTrackingAddress(address);
+
+    setTrackingAddress(QString::fromStdString(address));
+}
+
+void Application::setTrackingAddress(const QString& address) {
+    if (m_trackingAddress != address.toStdString()) {
+        m_trackingAddress = address.toStdString();
+        Q_EMIT trackingAddressChanged(address);
+    }
 }
